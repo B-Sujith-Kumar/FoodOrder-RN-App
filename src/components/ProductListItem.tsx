@@ -15,7 +15,6 @@ export const defaultImage =
 
 const ProductListItem = ({ product }: { product: Product }) => {
   const segments = useSegments();
-  console.log(segments)
   return (
     <Link href={`/${segments[0]}/menu/${product.id}`} asChild>
       <Pressable style={styles.container}>
