@@ -8,7 +8,6 @@ import { Order, OrderItem } from "@/assets/types";
 const OrdersScreen = () => {
   return (
     <>
-      <Stack.Screen options={{title: "Orders"}} />
       <FlatList
         data={orders}
         renderItem={({ item }: { item: Order }) => (
