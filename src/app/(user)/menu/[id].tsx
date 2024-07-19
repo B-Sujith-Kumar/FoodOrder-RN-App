@@ -1,21 +1,27 @@
-import { View, Text, StyleSheet, Image, Pressable, Alert } from "react-native";
+import { View, Text, StyleSheet, Image, Pressable, Alert, ActivityIndicator } from "react-native";
 import React from "react";
 import { router, Stack, useLocalSearchParams } from "expo-router";
-import products from "@/assets/data/products";
 import { useState } from "react";
 import Button from "@/src/components/Button";
 import { useCart } from "@/src/provider/CartProvider";
 import { CartItem, PizzaSize } from "@/assets/types";
+import { useProduct } from "@/src/api/products";
+import { defaultImage } from "@/src/components/ProductListItem";
 
 const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 
 const ProductDetailsScreeen = () => {
-  const { id } = useLocalSearchParams();
+  const { id: idString } = useLocalSearchParams();
+  const id = parseFloat(typeof idString === "string" ? idString : idString![0]);
+  const {data: product, error, isLoading} = useProduct(id);
   const { addItem, items } = useCart();
   const [selectedSize, setSelectedSize] = useState<PizzaSize>("M");
-  const product = products.find((item) => item.id.toString() === id);
-  if (!product) {
-    return <Text style={styles.notFound}>Product not found!</Text>;
+
+  if (isLoading) {
+    return <ActivityIndicator />
+  }
+  if (error) {
+    return <Text style={styles.notFound}>Failed to fetch product</Text>;
   }
   const addToCart = () => {
     if (!product) return;
@@ -26,7 +32,7 @@ const ProductDetailsScreeen = () => {
     <View style={styles.container}>
       <Stack.Screen options={{ title: `${product.name}` }} />
       <Image
-        source={{ uri: product.image }}
+        source={{ uri: product.image || defaultImage }}
         style={styles.image}
         resizeMode="contain"
       />

@@ -9,15 +9,15 @@ import {
   ActivityIndicator,
 } from "react-native";
 import ProductListItem from "@/src/components/ProductListItem";
-import { useProductList } from "../../products";
+import { useProductList } from "../../../api/products/index";
 
 export default function TabOneScreen() {
   const { data: products, error, isLoading } = useProductList();
   if (isLoading) {
-    return <ActivityIndicator />
+    return <ActivityIndicator />;
   }
   if (error) {
-    return <Text>Failed to fetch products</Text>
+    return <Text>Failed to fetch products</Text>;
   }
   return (
     <FlatList
