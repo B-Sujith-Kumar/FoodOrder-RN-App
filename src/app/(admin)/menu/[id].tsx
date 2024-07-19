@@ -8,6 +8,7 @@ import { useCart } from "@/src/provider/CartProvider";
 import { CartItem, PizzaSize } from "@/assets/types";
 import { FontAwesome } from "@expo/vector-icons";
 import { useProduct } from "@/src/api/products";
+import { defaultImage } from "@/src/components/ProductListItem";
 
 const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 
@@ -54,7 +55,7 @@ const ProductDetailsScreeen = () => {
       />
       <Stack.Screen options={{ title: `${product.name}` }} />
       <Image
-        source={{ uri: product.image }}
+        source={{ uri: product.image || defaultImage }}
         style={styles.image}
         resizeMode="contain"
       />
