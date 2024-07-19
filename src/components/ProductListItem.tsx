@@ -2,6 +2,7 @@ import { View } from "./Themed";
 import { Image, Pressable, StyleSheet, Text } from "react-native";
 import Colors from "../constants/Colors";
 import { Link, useSegments } from "expo-router";
+import { Tables } from "@/assets/types";
 
 type Product = {
   id: number;
@@ -13,7 +14,7 @@ type Product = {
 export const defaultImage =
   "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png";
 
-const ProductListItem = ({ product }: { product: Product }) => {
+const ProductListItem = ({ product }: { product: Tables<'products'> }) => {
   const segments = useSegments();
   return (
     <Link href={`/${segments[0]}/menu/${product.id}`} asChild>
