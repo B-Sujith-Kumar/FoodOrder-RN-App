@@ -31,9 +31,9 @@ const ProductDetailsScreeen = () => {
   };
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ title: `${product.name}` }} />
+      <Stack.Screen options={{ title: `${product?.name}` }} />
       <RemoteImage
-        path={product?.image}
+        path={product?.image!}
         fallback={defaultImage}
         style={styles.image}
         resizeMode="contain"
@@ -60,7 +60,7 @@ const ProductDetailsScreeen = () => {
           </Pressable>
         ))}
       </View>
-      <Text style={styles.price}>${product.price}</Text>
+      <Text style={styles.price}>${product?.price}</Text>
       <Button text="Add to cart" onPress={addToCart} />
     </View>
   );

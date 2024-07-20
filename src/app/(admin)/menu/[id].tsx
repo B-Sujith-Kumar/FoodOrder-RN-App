@@ -56,7 +56,7 @@ const ProductDetailsScreeen = () => {
       />
       <Stack.Screen options={{ title: `${product.name}` }} />
       <RemoteImage
-        path={product?.image}
+        path={product?.image!}
         fallback={defaultImage}
         style={styles.image}
         resizeMode="contain"

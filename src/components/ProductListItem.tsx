@@ -22,7 +22,7 @@ const ProductListItem = ({ product }: { product: Tables<'products'> }) => {
       <Pressable style={styles.container}>
         <View style={styles.imageContainer}>
           <RemoteImage
-            path={product.image}
+            path={product?.image!}
             fallback={defaultImage}
             style={styles.image}
             resizeMode="contain"

@@ -12,13 +12,13 @@ const OrderDetailsScreen = () => {
     const { id: idString } = useLocalSearchParams();
     const id = parseInt(typeof idString === "string" ? idString : idString![0]);
     const { data: order, error, isLoading } = useOrderDetails(id);
+    useUpdateOrderListener(id);
     if (isLoading) {
       return <ActivityIndicator />
     }
     if (error) {
       return <Text>Failed to fetch the orders</Text>
     }
-    useUpdateOrderListener(id);
   return (
     <>
       <Stack.Screen options={{ title: `Order #${id}` }} />

@@ -30,7 +30,9 @@ const CreateProductScreen = () => {
   const [errors, setErrors] = useState("");
   const [image, setImage] = useState<string | null>(null);
   const { id: idString } = useLocalSearchParams();
-  const id = parseFloat(typeof idString === "string" ? idString : idString?.[0]!);
+  const id = parseFloat(
+    typeof idString === "string" ? idString : idString?.[0]!
+  );
   const isUpdating = !!id;
 
   const { mutate: insertProduct } = useInsertProduct();
@@ -94,18 +96,19 @@ const CreateProductScreen = () => {
     );
   };
 
-  const onUpdate = () => {
+  const onUpdate = async () => {
     if (!validateInput()) {
       return;
     }
-    Alert.alert(
-      "Product Created",
-      `Product has been created, name: ${name}, price: ${price}`
-    );
+    const imagePath = await uploadImage();
     updateProduct(
-      { id, name, price: parseFloat(price), image },
+      { id, name, price: parseFloat(price), image: imagePath },
       {
         onSuccess: () => {
+          Alert.alert(
+            "Product Updated",
+            `Product has been updated, name: ${name}, price: ${price}`
+          );
           setErrors("");
           resetFields();
           router.back();
@@ -146,19 +149,19 @@ const CreateProductScreen = () => {
   };
 
   const uploadImage = async () => {
-    if (!image?.startsWith('file://')) {
+    if (!image?.startsWith("file://")) {
       return;
     }
-  
+
     const base64 = await FileSystem.readAsStringAsync(image, {
-      encoding: 'base64',
+      encoding: "base64",
     });
     const filePath = `${randomUUID()}.png`;
-    const contentType = 'image/png';
+    const contentType = "image/png";
     const { data, error } = await supabase.storage
-      .from('product-images')
+      .from("product-images")
       .upload(filePath, decode(base64), { contentType });
-  
+
     if (data) {
       return data.path;
     }

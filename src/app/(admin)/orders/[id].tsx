@@ -17,11 +17,11 @@ const OrderDetailsScreen = () => {
   if (isLoading) {
     return <ActivityIndicator />;
   }
-  if (error) {
+  if (error || !order) {
     return <Text>Failed to fetch the orders</Text>;
   }
-  const updateStatus = (status: string) => {
-    updateOrder({ id, updatedFields: { status } });
+  const updateStatus = async (status: string) => {
+    await updateOrder({ id, updatedFields: { status } });
   };
   return (
     <>
