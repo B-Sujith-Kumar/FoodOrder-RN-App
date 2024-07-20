@@ -6,6 +6,7 @@ import OrderListItem from "@/src/components/OrderListItem";
 import OrderItemListItem from "@/src/components/OrderItemListItem";
 import { FlatList } from "react-native";
 import { useOrderDetails } from "@/src/api/orders";
+import { useUpdateOrderListener } from "@/src/api/orders/subscription";
 
 const OrderDetailsScreen = () => {
     const { id: idString } = useLocalSearchParams();
@@ -17,6 +18,7 @@ const OrderDetailsScreen = () => {
     if (error) {
       return <Text>Failed to fetch the orders</Text>
     }
+    useUpdateOrderListener(id);
   return (
     <>
       <Stack.Screen options={{ title: `Order #${id}` }} />
