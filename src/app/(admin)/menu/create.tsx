@@ -12,6 +12,7 @@ import Button from "@/src/components/Button";
 import { defaultImage } from "@/src/components/ProductListItem";
 import Colors from "@/src/constants/Colors";
 import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import {
   useDeleteProduct,
@@ -19,6 +20,9 @@ import {
   useProduct,
   useUpdateProduct,
 } from "@/src/api/products";
+import { randomUUID } from "expo-crypto";
+import { supabase } from "@/src/lib/supabase";
+import { decode } from "base64-arraybuffer";
 
 const CreateProductScreen = () => {
   const [name, setName] = useState("");
@@ -69,26 +73,25 @@ const CreateProductScreen = () => {
     }
   };
 
-  const onCreate = () => {
+  const onCreate = async () => {
     if (!validateInput()) {
       return;
     }
-    Alert.alert(
-      "Product Created",
-      `Product has been created, name: ${name}, price: ${price}`
-    );
+    const imagePath = await uploadImage();
     insertProduct(
-      { name, price: parseFloat(price), image },
+      { name, price: parseFloat(price), image: imagePath },
       {
         onSuccess: () => {
           setErrors("");
           resetFields();
           router.back();
+          Alert.alert(
+            "Product Created",
+            `Product has been created, name: ${name}, price: ${price}`
+          );
         },
       }
     );
-    setErrors("");
-    resetFields();
   };
 
   const onUpdate = () => {
@@ -140,6 +143,25 @@ const CreateProductScreen = () => {
         router.replace("/(admin)");
       },
     });
+  };
+
+  const uploadImage = async () => {
+    if (!image?.startsWith('file://')) {
+      return;
+    }
+  
+    const base64 = await FileSystem.readAsStringAsync(image, {
+      encoding: 'base64',
+    });
+    const filePath = `${randomUUID()}.png`;
+    const contentType = 'image/png';
+    const { data, error } = await supabase.storage
+      .from('product-images')
+      .upload(filePath, decode(base64), { contentType });
+  
+    if (data) {
+      return data.path;
+    }
   };
 
   return (
