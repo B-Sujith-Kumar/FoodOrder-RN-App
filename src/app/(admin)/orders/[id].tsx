@@ -7,19 +7,22 @@ import OrderItemListItem from "@/src/components/OrderItemListItem";
 import { FlatList } from "react-native";
 import { OrderStatusList } from "@/assets/types";
 import Colors from "@/src/constants/Colors";
-import { useOrderDetails } from "@/src/api/orders";
+import { useOrderDetails, useUpdateOrder } from "@/src/api/orders";
 
 const OrderDetailsScreen = () => {
   const { id: idString } = useLocalSearchParams();
   const id = parseInt(typeof idString === "string" ? idString : idString![0]);
   const { data: order, error, isLoading } = useOrderDetails(id);
+  const { mutate: updateOrder } = useUpdateOrder();
   if (isLoading) {
-    return <ActivityIndicator />
+    return <ActivityIndicator />;
   }
   if (error) {
-    return <Text>Failed to fetch the orders</Text>
+    return <Text>Failed to fetch the orders</Text>;
   }
-  console.log(order);
+  const updateStatus = (status: string) => {
+    updateOrder({ id, updatedFields: { status } });
+  };
   return (
     <>
       <Stack.Screen options={{ title: `Order #${id}` }} />
@@ -37,7 +40,7 @@ const OrderDetailsScreen = () => {
                 {OrderStatusList.map((status) => (
                   <Pressable
                     key={status}
-                    onPress={() => console.warn("Update status")}
+                    onPress={() => updateStatus(status)}
                     style={{
                       borderColor: Colors.light.tint,
                       borderWidth: 1,
