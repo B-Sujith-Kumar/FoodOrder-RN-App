@@ -1,13 +1,17 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import React from "react";
-import { Order, OrderItem } from "@/assets/types";
+import { Order, OrderItem, Tables } from "@/assets/types";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Link, useSegments } from "expo-router";
 
 dayjs.extend(relativeTime);
 
-const OrderListItem = ({ order }: { order: Order }) => {
+type OrderListItemProps = {
+    order: Tables<"orders">
+}
+
+const OrderListItem = ({ order }: OrderListItemProps) => {
   const segments = useSegments();
   return (
     <Link href={`/${segments[0]}/orders/${order.id}`} asChild>

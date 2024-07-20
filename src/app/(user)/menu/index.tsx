@@ -7,9 +7,12 @@ import {
   ScrollView,
   FlatList,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import ProductListItem from "@/src/components/ProductListItem";
 import { useProductList } from "../../../api/products/index";
+import Button from "@/src/components/Button";
+import { supabase } from "@/src/lib/supabase";
 
 export default function TabOneScreen() {
   const { data: products, error, isLoading } = useProductList();
@@ -26,7 +29,11 @@ export default function TabOneScreen() {
       numColumns={2}
       contentContainerStyle={{ gap: 20, padding: 5 }}
       columnWrapperStyle={{ gap: 10 }}
+      ListFooterComponent={
+        <Button text="Log Out" onPress={() => supabase.auth.signOut()} />
+      }
     />
+    
   );
 }
 

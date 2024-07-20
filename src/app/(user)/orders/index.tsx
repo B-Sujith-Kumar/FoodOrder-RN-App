@@ -1,17 +1,24 @@
-import { View, Text, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  Touchable,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import { Stack } from "expo-router";
-import orders from "@/assets/data/orders";
 import OrderListItem from "@/src/components/OrderListItem";
 import { Order, OrderItem } from "@/assets/types";
+import { useMyOrderList } from "@/src/api/orders";
 
 const OrdersScreen = () => {
+  const { data: orders, error, isLoading } = useMyOrderList();
   return (
     <>
-      <Stack.Screen options={{title: "Orders"}} />
+      <Stack.Screen options={{ title: "Orders" }} />
       <FlatList
         data={orders}
-        renderItem={({ item }: { item: Order }) => (
+        renderItem={({ item }) => (
           <OrderListItem order={item} />
         )}
       />

@@ -26,7 +26,7 @@ const CreateProductScreen = () => {
   const [errors, setErrors] = useState("");
   const [image, setImage] = useState<string | null>(null);
   const { id: idString } = useLocalSearchParams();
-  const id = parseFloat(typeof idString === "string" ? idString : idString![0]);
+  const id = parseFloat(typeof idString === "string" ? idString : idString?.[0]!);
   const isUpdating = !!id;
 
   const { mutate: insertProduct } = useInsertProduct();
