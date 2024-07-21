@@ -8,6 +8,7 @@ import { FlatList } from "react-native";
 import { OrderStatusList } from "@/assets/types";
 import Colors from "@/src/constants/Colors";
 import { useOrderDetails, useUpdateOrder } from "@/src/api/orders";
+import { notifyUser } from "@/src/lib/notifications";
 
 const OrderDetailsScreen = () => {
   const { id: idString } = useLocalSearchParams();
@@ -22,6 +23,7 @@ const OrderDetailsScreen = () => {
   }
   const updateStatus = async (status: string) => {
     await updateOrder({ id, updatedFields: { status } });
+    notifyUser({...order, status});
   };
   return (
     <>

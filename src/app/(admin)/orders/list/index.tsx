@@ -18,8 +18,6 @@ const OrdersScreen = () => {
     return <Text>{error.message}</Text>;
   }
 
-  const queryClient = useQueryClient();
-
   useInsertOrderListener();
 
   return (
