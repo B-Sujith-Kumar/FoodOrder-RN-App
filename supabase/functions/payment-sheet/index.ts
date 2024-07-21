@@ -1,16 +1,13 @@
-// Follow this setup guide to integrate the Deno language server with your editor:
-// https://deno.land/manual/getting_started/setup_your_environment
-// This enables autocomplete, go to definition, etc.
-
-// Setup type definitions for built-in Supabase Runtime APIs
 import "https://esm.sh/@supabase/functions-js/src/edge-runtime.d.ts";
 import { stripe } from "../utils/stripe.ts";
+import { createOrRetrieveProfile } from "../utils/supabase.ts";
 
 console.log("Hello from Functions!");
 
-Deno.serve(async (req) => {
+Deno.serve(async (req: Request) => {
   try {
     const { amount } = await req.json();
+    const customer = await createOrRetrieveProfile(req);
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount,
       currency: "usd",
